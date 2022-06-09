@@ -3,10 +3,13 @@ const args = process.argv;
 
 const breed = args.slice(2).join(" ");
 
-request(`https://api.thecatapi.com/v1/breeds/search?q=${breed}`, (error, response, body) => {
+request(`https://ap1.thecatapi.com/v1/breeds/search?q=${breed}`, (error, response, body) => {
 
   if (error !== null) {
-    return console.log("Ooops, something went wrong!");
+    console.log(error);
+    if (error.hostname !== "api.thecatapi.com") {
+      return console.log("Incorrect URL");
+    }
 
   }
 
@@ -20,3 +23,6 @@ request(`https://api.thecatapi.com/v1/breeds/search?q=${breed}`, (error, respons
 
 });
   
+// fetchBreedDescription("Siberian", (error, description) => {
+
+// });
