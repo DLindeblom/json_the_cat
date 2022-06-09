@@ -1,28 +1,28 @@
 const request = require("request");
-const args = process.argv;
+const breedName = process.argv[2];
 
-const breed = args.slice(2).join(" ");
+const fetchBreedDescription = function(breedName, callback) {
 
-request(`https://ap1.thecatapi.com/v1/breeds/search?q=${breed}`, (error, response, body) => {
+  request(`https://api.thecatapi.com/v1/breeds/search?q=${breedName}`, (error, response, body) => {
 
-  if (error !== null) {
-    console.log(error);
-    if (error.hostname !== "api.thecatapi.com") {
-      return console.log("Incorrect URL");
+    if (error) {
+      callback(error);
+      return;
+      // console.log(error);
+      // if (error.hostname !== "api.thecatapi.com") {
+      // return console.log("Incorrect URL");
     }
 
-  }
+    const data = JSON.parse(body);
 
-  const data = JSON.parse(body);
+    if (data[0] === undefined) {
+      callback("Breed is not found");
+      // console.log("Are you sure that is a type of cat?");
+    } else (
+      callback(null, data[0].description)
+    );
 
-  if (data[0] === undefined) {
-    console.log("Are you sure that is a type of cat?");
-  } else (
-    console.log(data[0].description)
-  );
+  });
+};
 
-});
-  
-// fetchBreedDescription("Siberian", (error, description) => {
-
-// });
+module.exports = { fetchBreedDescription };
